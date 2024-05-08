@@ -7,10 +7,17 @@ def lambda_handler(event, context):
         body = json.loads(event["body"])
         sys_instruct = body["sys_instruct"]
         user_request = body["user_request"]
+        try:
+            deployment_name = body["deployment_name"]
+        except Exception:
+            deployment_name = "gpt-35-thread3"
         connectionId = event["requestContext"]["connectionId"]
         ivk = InvokeOpenai(connectionId)
-        response = ivk.call_openai(sys_instruct, user_request)
-        return {"statusCode": 200, "body": f"\n\nCompleted\n\n{response}"}
+        response = ivk.call_openai(sys_instruct, user_request, deployment_name)
+        return {
+            "statusCode": 200,
+            "body": f'𵵙{{"response": "{response}", "user_request": "{user_request}"}}𵵙',
+        }
     except Exception as e:
         return {
             "statusCode": 500,

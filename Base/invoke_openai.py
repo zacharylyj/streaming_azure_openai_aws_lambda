@@ -19,12 +19,11 @@ class InvokeOpenai:
             api_version=os.getenv("AZURE_OPENAI_API_VERSION"),
         )
 
-    def call_openai(self, sys_instruct, user_request, model="gpt-35-thread1"):
+    def call_openai(self, sys_instruct, user_request, model):
         messages = [
             {"role": "system", "content": sys_instruct},
             {"role": "user", "content": user_request},
         ]
-
         response = ""
         try:
             completion = self.client.chat.completions.create(

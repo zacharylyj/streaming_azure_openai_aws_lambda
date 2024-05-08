@@ -13,7 +13,13 @@ def lambda_handler(event, context):
             deployment_name = "gpt-35-thread3"
         connectionId = event["requestContext"]["connectionId"]
         ivk = InvokeOpenai(connectionId)
-        response = ivk.call_openai(sys_instruct, user_request, deployment_name)
+        instruct = json.dumps(
+            [
+                {"role": "system", "content": sys_instruct},
+                {"role": "user", "content": user_request},
+            ]
+        )
+        response = ivk.call_openai(instruct, deployment_name)
         return {
             "statusCode": 200,
             "body": f'𵵙{{"response": "{response}", "user_request": "{user_request}"}}𵵙',
